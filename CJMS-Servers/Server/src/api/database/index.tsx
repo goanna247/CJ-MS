@@ -5,7 +5,7 @@ export class Database {
 
   // Db config
   public dbConfg = {
-    url: 'mongodb://localhost:27017',
+    url: 'mongodb://localhost:3001',
     dbName: 'cjms_database',
     user: 'cjms',
     pass: 'cjms',

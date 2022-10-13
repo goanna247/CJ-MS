@@ -10,7 +10,6 @@
   "dependencies": {
     "@types/node": "^17.0.21",
     "copyfiles": "^2.4.1",
-    "cross-env": "^7.0.3",
     "lerna": "^4.0.0",
     "node": "^17.5.0",
     "react-icons": "^4.3.1"
@@ -27,5 +26,8 @@
     "build": "yarn run copy-env-files && lerna run build --stream",
     "start": "yarn run copy-env-files && lerna run start --stream",
     "dev": "lerna run dev --stream"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   }
 }

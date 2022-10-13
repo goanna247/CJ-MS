@@ -64,8 +64,8 @@
     - [Docker](https://docs.docker.com/get-docker/)
   - Setting up Database
     - Spin up a mongodb docker container using the included [script](/Database/scripts/create_local.sh)
-      - Or alternatively spin it up manually `docker run -d -it -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=cjms -e MONGO_INITDB_ROOT_PASSWORD=cjms -e MONGO_INITDB_DATABASE=cjms_database --name cjms_db -d mongo`
-    - The database should now be named `cjms_db` on port `27017`,  with the default user and password `cjms`
+      - Or alternatively spin it up manually `docker run -d -it -p 3001:3001 -e MONGO_INITDB_ROOT_USERNAME=cjms -e MONGO_INITDB_ROOT_PASSWORD=cjms -e MONGO_INITDB_DATABASE=cjms_database --name cjms_db -d mongo`
+    - The database should now be named `cjms_db` on port `3001`,  with the default user and password `cjms`
   - Installing Dependencies. Inside the root project run
     - `npm install -g yarn`
     - `yarn install`
@@ -77,7 +77,7 @@
   
 ## Port Numbers
 ### Database/Storage
-- Database port: `27017` (internal unless specified otherwise)
+- Database port: `3001` (internal unless specified otherwise)
 
 ### Server
 - Request Server Port: `2121`

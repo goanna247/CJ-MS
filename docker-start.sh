@@ -19,7 +19,7 @@ echo starting mongo
 sleep 5
 while [ $retries -le $max_retries ]
 do
-  if netstat -tulpn | grep :27017 >/dev/null ; then
+  if netstat -tulpn | grep :3001 >/dev/null ; then
     printf '\e[1;32m'
     printf "\nDatabase Online: Starting CJMS\n"
     printf '\e[0m'
