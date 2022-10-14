@@ -56,7 +56,7 @@ export default class DispTable extends Component<IProps, IState> {
     // console.log(this.renderTable());
     // this.csvHelper.exportFromTable(this.getFormattedData(this.props.data), "yes");
     // this.csvHelper.exportFromTable([[2, 2],[2, 2]], "yes");
-    this.csvHelper.exportFromArray(this.getFormattedData(this.props.data));
+    this.csvHelper.exportFromArray([["hello", "drew"], ["dembo", "d-d"]]);
   }
 
   getFormatedHeaders(headers:any[]) {

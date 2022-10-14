@@ -3,25 +3,29 @@ import { Component } from "react";
 export class CSVHelper {
 
   public exportFromTable(table:any, fileName:any): void {
-    let csv = []
-    let tableRows = table.querySelectorAll("tr")
+    // let csv = []
+    // let tableRows = table.querySelectorAll("tr")
 
     
-    for (let i = 0; i< tableRows.length; i++)  {
-      let row = [],
-      cols = tableRows[i].querySelectorAll("td, th")
+    // for (let i = 0; i< tableRows.length; i++)  {
+    //   let row = [],
+    //   cols = tableRows[i].querySelectorAll("td, th")
         
 
-      for (let j = 0; j < cols.length; j++) {
-        row.push(cols[i].innerHTML)
-      }
+    //   for (let j = 0; j < cols.length; j++) {
+    //     row.push(cols[i].innerHTML)
+    //   }
       
-      csv.push(row.join(","))
-      console.log(table);
-    }
-      
-      // this.downloadCsv("cell 1", fileName);
-      this.downloadCsv( csv.join("\n"), fileName);
+    //   csv.push(row.join(","))
+    //   console.log(table);
+    // }
+
+    var csv = table.map(function(d:any){
+      return d.join();
+    }).join('\n');
+
+      this.downloadCsv( csv, fileName);
+      // this.downloadCsv( csv.join("\n"), fileName);
   }
 
   public exportFromArray(tableArray:any) {

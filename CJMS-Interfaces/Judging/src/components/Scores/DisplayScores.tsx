@@ -7,8 +7,6 @@ import "../../assets/stylesheets/loader.scss";
 import { CJMS_FETCH_GENERIC_GET } from "@cjms_interfaces/shared/lib/components/Requests/Request";
 import { comm_service, request_namespaces } from "@cjms_shared/services";
 
-// import {CSVHelper} from "./ExportScores";
-
 interface IProps {}
 interface IState {
   teamData: any, 
