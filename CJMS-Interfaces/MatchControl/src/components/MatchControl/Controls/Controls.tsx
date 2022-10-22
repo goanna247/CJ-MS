@@ -1,5 +1,5 @@
-import { comm_service } from "@cjms_interfaces/shared";
-import { CJMS_FETCH_GENERIC_POST, CJMS_POST_TIMER } from "@cjms_interfaces/shared/lib/components/Requests/Request";
+import { CJMS_POST_MATCH_UPDATE, comm_service } from "@cjms_interfaces/shared";
+import { Requests } from "@cjms_interfaces/shared";
 import { IEvent, IMatch, initIEvent, initIMatch, initITeam, ITeam, request_namespaces } from "@cjms_shared/services";
 import { Component } from "react";
 
@@ -39,7 +39,7 @@ export default class Controls extends Component<IProps, IState> {
 
       timerState: "default",
       currentTime: 150,
-      soundsEnabled: false
+      soundsEnabled: true
     }
 
     comm_service.listeners.onMatchLoaded(async (match:string) => {
@@ -206,36 +206,49 @@ export default class Controls extends Component<IProps, IState> {
     }
   }
 
+  handleDeferMatch(defer:boolean) {
+    console.log("Defer match");
+    if (this.props.selected_match) {
+      var match_update = this.props.selected_match;
+      match_update.deferred = defer;
+      CJMS_POST_MATCH_UPDATE(match_update.match_number, match_update);
+      comm_service.senders.sendEventUpdateEvent(true);
+    }
+  }
+
   handleLoadMatch() {
     if (this.props.selected_match != undefined) {
-      CJMS_FETCH_GENERIC_POST(request_namespaces.request_post_match_load, {load:true, match: this.props.selected_match?.match_number});
+      Requests.CJMS_FETCH_GENERIC_POST(request_namespaces.request_post_match_load, {load:true, match: this.props.selected_match?.match_number});
     }
   }
 
   handleUnloadMatch() {
-    CJMS_FETCH_GENERIC_POST(request_namespaces.request_post_match_load, {load:false, match:""});
+    Requests.CJMS_FETCH_GENERIC_POST(request_namespaces.request_post_match_load, {load:false, match:""});
   }
 
   handleSetMatchComplete(complete:boolean) {
     if (this.state.loaded_match != undefined) {
-      CJMS_FETCH_GENERIC_POST(request_namespaces.request_post_match_complete, {complete:complete, match:this.state.loaded_match?.match_number});
+      Requests.CJMS_FETCH_GENERIC_POST(request_namespaces.request_post_match_complete, {complete:complete, match:this.state.loaded_match?.match_number});
+      if (complete) {
+        this.handleUnloadMatch();
+      }
     }
   }
 
   handlePreStartMatch() {
-    CJMS_POST_TIMER("prestart");
+    Requests.CJMS_POST_TIMER("prestart");
   }
 
   handleStartMatch() {
-    CJMS_POST_TIMER("start");
+    Requests.CJMS_POST_TIMER("start");
   }
 
   handleAbortMatch() {
-    CJMS_POST_TIMER("stop");
+    Requests.CJMS_POST_TIMER("stop");
   }
 
   handleReloadMatch() {
-    CJMS_POST_TIMER("reload");
+    Requests.CJMS_POST_TIMER("reload");
     this.setState({timerState: "default"});
     this.setCurrentTime(150);
   }
@@ -295,13 +308,16 @@ export default class Controls extends Component<IProps, IState> {
             onClick={() => this.handleLoadMatch()}
             className={`hoverButton ${(!this.state.loaded_match) ? "back-orange" : "back-half-transparent"} buttons`}
             disabled={(this.state.loaded_match != undefined)}
-          >Load Match</button>
+          >Load</button>
 
           <button 
             onClick={() => this.handleUnloadMatch()}
             className={`hoverButton ${(this.state.loaded_match && (this.state.timerState == 'default' || this.state.timerState == 'armed' || this.state.timerState == 'ended')) ? "back-orange" : "back-half-transparent"} buttons`}
             disabled={(!this.state.loaded_match || (this.state.timerState != 'default' && this.state.timerState != 'armed' && this.state.timerState != 'ended'))}
-          >Unload Match</button>
+          >Unload</button>
+        </div>
+
+        <div className="buttons">
         </div>
       </>
     );
@@ -319,7 +335,7 @@ export default class Controls extends Component<IProps, IState> {
         </div>
 
         <div className="loaded_info">
-          <h2>Status: {this.getStatusMatch()}</h2>
+          <h1>Status: {this.getStatusMatch()}</h1>
           <div className="buttons">
 
             {/* Unload Match */}
@@ -336,6 +352,15 @@ export default class Controls extends Component<IProps, IState> {
               disabled={!this.state.loaded_match}
             >Set Complete</button>
           </div>
+
+          <div className="defer_button">
+            <button 
+              onClick={() => this.handleDeferMatch(!this.props.selected_match?.deferred || false)}
+              className={`hoverButton ${(!this.state.loaded_match && this.props.selected_match != undefined) ? "back-cyan" : "back-half-transparent"} buttons`}
+              disabled={(this.state.loaded_match != undefined)}
+            >{this.props.selected_match?.deferred ? "Schedule" : "Defer"}</button>
+          </div>
+          
         </div>
 
         <div className="timer_controls">

@@ -3,13 +3,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.initITeamScore = void 0;
 function initITeamScore(instance) {
     const defaults = {
-        gp: 0,
+        gp: '',
         referee: '',
         no_show: false,
         score: 0,
         valid_scoresheet: false,
         scoresheet: {
-            team_id: '',
+            // team_id: '',
             tournament_id: '',
             round: 0,
             answers: [],
