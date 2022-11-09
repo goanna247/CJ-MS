@@ -1,37 +1,66 @@
 import { Component } from "react";
 
+function removeEl(array:any, remIdx:any) {
+  console.log("remove column");
+  return array.map(function(arr:any) {
+    return arr.filter(function(el:any,idx:any){return idx !== remIdx});  
+  });
+ };
+
+ function insertColumnAtRight() {
+  
+}
+
 export class CSVHelper {
 
   public exportFromTable(table:any, fileName:any): void {
-    // let csv = []
-    // let tableRows = table.querySelectorAll("tr")
-
-    
-    // for (let i = 0; i< tableRows.length; i++)  {
-    //   let row = [],
-    //   cols = tableRows[i].querySelectorAll("td, th")
-        
-
-    //   for (let j = 0; j < cols.length; j++) {
-    //     row.push(cols[i].innerHTML)
-    //   }
-      
-    //   csv.push(row.join(","))
-    //   console.log(table);
-    // }
-
     var csv = table.map(function(d:any){
-      return d.join();
-    }).join('\n');
+        return d.join();
+      }).join('\n');
 
-      this.downloadCsv( csv, fileName);
-      // this.downloadCsv( csv.join("\n"), fileName);
+    this.downloadCsv( csv, fileName);
   }
 
+  public exportWithoutNames(table:any, fileName:any): void {
+    let newTable = removeEl(table, 2)
+    var csv = newTable.map(function(a:any){
+      return a.join();
+    }).join('\n');
+
+    this.downloadCsv( csv, fileName);
+  }
+
+  public  exportFullFormat(table:any, fileName: any): void {
+    // let newTable;
+    // newTable[0, 0] = table[0, 0];
+    //  = removeEl(table, 2)
+    // newTable.forEach(function(e){
+    //   if (typeof e === "object"){
+    //     e["new column"] = ""
+    //   }
+    // });
+    var arr_1 = ["USA","GERMANY","AUSTRIA"];
+    console.log("full format");
+    
+
+    const mapToNewArray = (arr:any, arrTwo:any) => {
+      return arr.map((elem:any, index:any) => { elem.push(arrTwo[index]); return elem; });
+    }
+  
+    let newArray = mapToNewArray(table, arr_1);
+    var csv = newArray.map(function(a:any){
+      return a.join();  
+    }).join('\n');
+
+    this.downloadCsv( csv, fileName);
+  }
+  
+
+  
+
   public exportFromArray(tableArray:any) {
-    var csv = tableArray.toString();
-    this.downloadCsv(csv, "yes");
-    // document.write(csv);
+    // var csv = tableArray.toString();
+    // this.downloadCsv(csv, "yes");
   }
 
   private downloadCsv(csv:any, fileName:any): void {
@@ -59,19 +88,3 @@ export class CSVHelper {
     return [year, month, day].join('-')
   }
 }
-
-
-// export default class ExportScores extends Component<IProps, IState> {
-//   constructor(props: any) {
-//     super(props);
-//     this.state = {}
-//   }
-
-//   render() {
-//     return (
-//       <div>
-//         <h1>Export here</h1>
-//       </div>
-//     )
-//   }
-// }

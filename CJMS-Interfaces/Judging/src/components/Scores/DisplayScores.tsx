@@ -7,6 +7,8 @@ import "../../assets/stylesheets/loader.scss";
 import { CJMS_FETCH_GENERIC_GET } from "@cjms_interfaces/shared/lib/components/Requests/Request";
 import { comm_service, request_namespaces } from "@cjms_shared/services";
 
+import {CSVHelper} from "../Scores/ExportScores";
+
 interface IProps {}
 interface IState {
   teamData: any, 
@@ -18,7 +20,7 @@ interface IState {
 }
 
 export default class DisplayScores extends Component<IProps, IState> {
-  // private csvHelper:CSVHelper = new CSVHelper();
+  private csvHelper:CSVHelper = new CSVHelper();
   constructor(props:any) {
     super(props);
     this.state = {
@@ -42,7 +44,9 @@ export default class DisplayScores extends Component<IProps, IState> {
       this.setData(teamData, eventData);
     });
 
-    // this.exportTableButton = this.exportTableButton.bind(this);
+    this.exportTableButton = this.exportTableButton.bind(this);
+    this.exportWOnames = this.exportWOnames.bind(this);
+    this.exportFullFormat = this.exportFullFormat.bind(this);
   }
 
   setData(teamData:any, eventData:any) {
@@ -73,9 +77,20 @@ export default class DisplayScores extends Component<IProps, IState> {
     return headers;
   }
 
-  // exportTableButton() {
-  //   this.csvHelper.exportFromTable(this.tableData, "yes");
-  // }
+  exportTableButton() {
+    console.log("export data with team names");
+    this.csvHelper.exportFromTable(this.tableData(), "FullTable");
+  }
+
+  exportWOnames() {
+    console.log("export data without team names");
+    this.csvHelper.exportWithoutNames(this.tableData(), "withoutNames");
+  }
+
+  exportFullFormat() {
+    console.log("export data in spreadsheet format, missing a row for top score");
+    this.csvHelper.exportFullFormat(this.tableData(), "FullFormat");
+  }
 
   tableData() {
     const teamData = this.state.teamData;
@@ -129,12 +144,20 @@ export default class DisplayScores extends Component<IProps, IState> {
     if (this.state.teamData && this.state.eventData) {
 
       return (
-        <div id='audience-display-app' className='audience-display-app'>
-          <DispTable headers={this.tableHeaders()} data={this.tableData()}/>
-          {/* <button type="submit" onClick={this.exportTableButton}>CLICK ME</button> */}
+        <div id='judge-display-app' className='audience-display-app'>
+          <div id='judge-display-table'>
+            <DispTable headers={this.tableHeaders()} data={this.tableData()}/>
+          </div>
+          <div className="judge-display-buttons">
+            <button className="judgeButton exportButton teamNames" type="submit" onClick={this.exportTableButton}>Export with team names</button>
+            <br/>
+            <button className="judgeButton exportButton withoutNames" type="submit" onClick={this.exportWOnames}>Export without team names</button>
+            <br/>
+            <button className="judgeButton exportButton fullFormat" type="submit" onClick={this.exportFullFormat}>Export in full format</button>
+          </div>
+
         </div>
       );
-
     } else {
       return (
         <div className="waiting-message">

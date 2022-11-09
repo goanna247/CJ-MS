@@ -87,7 +87,6 @@ export default class DispTable extends Component<IProps, IState> {
           </thead>
           { this.renderTable() }
         </table>
-        <button type="submit" onClick={this.exportTableButton}>CLICK ME</button>
       </div>
     );
   }
